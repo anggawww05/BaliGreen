@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('user.home');
+Route::controller(\App\Http\Controllers\AuthController::class)->group(function () {
+    Route::get('/register', 'indexRegister')->name('register.index');
+    // Route::post('/register', 'index')->name('register.index');
+    Route::get('/login', 'indexLogin')->name('login.index');
+    // Route::post('/register', 'index')->name('register.index');
 });
