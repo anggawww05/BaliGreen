@@ -1,114 +1,154 @@
 @extends('user.main')
 
 @section('container')
-    {{-- Cover depan --}}
-    <section id="cover"
-        class="relative flex items-center justify-center min-h-screen bg-linear-to-br from-[#578E7E] to-[#23272F] overflow-hidden">
-        <img src="{{ asset('assets/dev-asset.png') }}" alt="Digital Marketing Asset"
-            class="rounded-full shadow-2xl max-w-xs md:max-w-md h-auto border-8 border-white/10 transition-transform duration-300 group-hover:scale-105">
+    <section id="home"
+        class="relative flex items-center justify-center min-h-screen bg-linear-to-br from-[#5A7863] via-[#3d4f47] to-[#23272F] overflow-hidden">
+        <!-- Background Image -->
+        <img src="{{ asset('assets/home-cover.png') }}" alt="Digital Marketing Asset"
+            class="w-full h-screen object-cover absolute inset-0 opacity-40">
+
+        <!-- Overlay dengan linear -->
+        <div class="absolute inset-0 bg-linear-to-b from-black/60 via-black/70 to-black/80"></div>
+
+        <!-- Decorative elements -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-[#5A7863]/20 rounded-full blur-3xl -z-5"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-[#5A7863]/10 rounded-full blur-3xl -z-5"></div>
+
+        <!-- Content -->
+        <div class="relative z-10 text-center text-white max-w-3xl px-6 md:px-12">
+            <div class="mb-6 inline-block">
+                <span class="text-[#5A7863] font-semibold text-lg tracking-widest uppercase">Welcome to</span>
+            </div>
+            <h1 class="text-6xl md:text-7xl font-bold mb-6 leading-tight">
+                <span class="bg-linear-to-r from-[#5A7863] to-white bg-clip-text text-transparent">SAMDES</span>
+            </h1>
+            <div class="w-20 h-1 bg-linear-to-r from-[#5A7863] to-white rounded-full mx-auto mb-8"></div>
+            <p class="text-lg md:text-xl mb-10 leading-relaxed text-gray-200 max-w-2xl mx-auto">
+                Platform pengelolaan sampah desa digital yang dirancang untuk membantu desa mengelola limbah secara efisien
+                dan berkelanjutan.
+            </p>
+            <a href="{{ route('login.index') }}"
+                class="inline-block bg-[#5A7863] hover:bg-[#466e62] text-white font-semibold py-4 px-10 rounded-full shadow-2xl transition text-lg">
+                Mulai Sekarang
+            </a>
+        </div>
     </section>
 
-    {{-- Tentang Kami --}}
-    <section id="about" class="py-20 bg-white relative">
-        <div class="max-w-6xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-12">
-            <div class="flex-1">
-                <img src="{{ asset('assets/dev-asset.png') }}" alt="About Djingga Company"
-                    class="w-full max-w-md mx-auto rounded-3xl shadow-2xl border-4 border-[#52a08a]/10">
+    <section id="about" class="py-20 bg-white relative overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6 md:px-12">
+            <div class="flex gap-16 items-center">
+                <!-- Left Content -->
+                <div class="flex flex-col gap-8">
+                    <div>
+                        <span class="text-[#5A7863] font-semibold text-sm tracking-widest uppercase">Tentang Kami</span>
+                        <h2 class="text-4xl md:text-5xl font-bold text-[#23272F] mt-2 mb-4">
+                            Solusi Pengelolaan Sampah Desa Digital
+                        </h2>
+                        <div class="w-20 h-1 bg-[#5A7863] rounded"></div>
+                    </div>
+
+                    <p class="text-lg text-gray-700 leading-relaxed text-justify">
+                        <span class="font-semibold text-[#5A7863] ">SAMDES</span> adalah platform inovatif yang dirancang
+                        khusus untuk membantu desa-desa mengelola limbah secara efisien, terukur, dan berkelanjutan. Kami
+                        memahami tantangan yang dihadapi masyarakat desa dalam mengelola sampah, oleh karena itu kami
+                        menghadirkan solusi digital yang mudah digunakan.
+                    </p>
+
+
+
+                    <!-- Right Stats -->
+                    <div class="grid grid-cols-2 gap-6">
+                        <div
+                            class="bg-linear-to-br from-[#5A7863]/10 to-[#5A7863]/5 rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-300">
+                            <div class="text-4xl font-bold text-[#5A7863] mb-2">50+</div>
+                            <p class="text-gray-700 font-medium">Pengguna Aktif</p>
+                        </div>
+                        <div
+                            class="bg-linear-to-br from-[#5A7863]/10 to-[#5A7863]/5 rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-300">
+                            <div class="text-4xl font-bold text-[#5A7863] mb-2">Digital</div>
+                            <p class="text-gray-700 font-medium">Pembayaran Bulanan</p>
+                        </div>
+                        <div
+                            class="bg-linear-to-br from-[#5A7863]/10 to-[#5A7863]/5 rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-300">
+                            <div class="text-4xl font-bold text-[#5A7863] mb-2">Transparan</div>
+                            <p class="text-gray-700 font-medium">Pantau Sampah Real-Time</p>
+                        </div>
+                        <div
+                            class="bg-linear-to-br from-[#5A7863]/10 to-[#5A7863]/5 rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-300">
+                            <div class="text-4xl font-bold text-[#5A7863] mb-2">24/7</div>
+                            <p class="text-gray-700 font-medium">Pelayanan Penuh</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="flex-1 flex flex-col gap-6">
-                <h2 class="text-4xl md:text-5xl font-bold text-[#23272F] mb-4">
-                    Tentang Kami
-                </h2>
-                <div class="w-20 h-1 bg-[#52a08a] rounded mb-4"></div>
-                <p class="text-lg text-gray-700 leading-relaxed">
-                    <span class="font-semibold text-[#52a08a]">Djingga Company</span> adalah perusahaan IT yang beroperasi
-                    di Indonesia, tepatnya di Bali. Kami merupakan spesialis dalam menyediakan solusi teknologi yang
-                    disesuaikan untuk berbagai sektor di Indonesia.
-                </p>
-                <p class="text-lg text-gray-700 leading-relaxed">
-                    Dengan tim profesional berpengalaman, kami berkomitmen memberikan solusi berkualitas, inovatif, dan
-                    sesuai
-                    kebutuhan bisnis anda. Kepuasan klien adalah prioritas utama kami.
-                </p>
-                <a href="#services"
-                    class="inline-block mt-4 bg-[#52a08a] hover:bg-[#466e62] text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-200 text-lg">
-                    Pelajari Lebih Lanjut
-                </a>
-            </div>
-        </div>
-        <div class="absolute top-0 right-0 w-48 h-48 bg-[#52a08a]/10 rounded-full blur-3xl -z-10"></div>
-        <div class="absolute bottom-0 left-0 w-32 h-32 bg-[#578E7E]/10 rounded-full blur-2xl -z-10"></div>
+
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 w-48 h-48 bg-[#5A7863]/10 rounded-full blur-3xl -z-10"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-[#5A7863]/10 rounded-full blur-2xl -z-10"></div>
     </section>
 
     {{-- Layanan Kami --}}
-    <section id="services" class="py-20 bg-linear-to-br from-[#f8fafc] to-[#e6f4f1] relative">
+    <section id="tips" class="py-20 bg-[#5A7863] relative">
         <div class="max-w-6xl mx-auto px-6 md:px-12">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold text-[#23272F] mb-4">Layanan Kami</h2>
-                <div class="w-20 h-1 bg-[#52a08a] rounded mx-auto mb-4"></div>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Kami menawarkan berbagai layanan teknologi untuk mendukung pertumbuhan bisnis Anda di era digital.
+            <div class="text-center mb-12 text-white">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Tips & Trik</h2>
+                <div class="w-20 h-1 bg-[#5A7863] rounded mx-auto mb-4"></div>
+                <p class="text-lg max-w-2xl mx-auto">
+                    Berikut adalah beberapa tips dan trik yang dapat membantu desa Anda dalam pengelolaan sampah secara
+                    efektif.
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <!-- Service 1 -->
+                <!-- Tip 1 -->
                 <div
                     class="bg-white rounded-3xl shadow-xl p-8 flex flex-col items-center hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="bg-[#52a08a]/10 rounded-full p-5 mb-6">
-                        <svg class="w-12 h-12 text-[#52a08a]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    <div class="bg-[#5A7863]/10 rounded-full p-5 mb-6">
+                        <svg class="w-12 h-12 text-[#5A7863]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5.35709 16V5.78571c0-.43393.34822-.78571.77777-.78571H18.5793c.4296 0 .7778.35178.7778.78571V16M5.35709 16h-1c-.55229 0-1 .4477-1 1v1c0 .5523.44771 1 1 1H20.3571c.5523 0 1-.4477 1-1v-1c0-.5523-.4477-1-1-1h-1M5.35709 16H19.3571M9.35709 8l2.62501 2.5L9.35709 13m4.00001 0h2" />
+                                d="M5 12h14M5 16h14M5 8h14" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3 text-[#23272F]">Web Development</h3>
+                    <h3 class="text-2xl font-semibold mb-3 text-[#23272F]">Pilah Sampah</h3>
                     <p class="text-gray-600 text-center mb-4">
-                        Perancangan website profesional, responsif, dan sesuai kebutuhan bisnis Anda.
+                        Pastikan untuk memisahkan sampah organik dan non-organik untuk memudahkan proses daur ulang.
                     </p>
-                    {{-- <a href="#" class="text-[#52a08a] font-semibold hover:underline">Selengkapnya</a> --}}
                 </div>
+                <!-- Tip 2 -->
                 <div
                     class="bg-white rounded-3xl shadow-xl p-8 flex flex-col items-center hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="bg-[#52a08a]/10 rounded-full p-5 mb-6">
-                        <svg class="w-12 h-12 text-[#52a08a]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    <div class="bg-[#5A7863]/10 rounded-full p-5 mb-6">
+                        <svg class="w-12 h-12 text-[#5A7863]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                             <path fill-rule="evenodd"
-                                d="M5 4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4Zm12 12V5H7v11h10Zm-5 1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H12Z"
+                                d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 15h2v-2h-2v2zm0-4h2V7h-2v6z"
                                 clip-rule="evenodd" />
                         </svg>
-
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3 text-[#23272F]">Mobile Development</h3>
+                    <h3 class="text-2xl font-semibold mb-3 text-[#23272F]">Edukasi Masyarakat</h3>
                     <p class="text-gray-600 text-center mb-4">
-                        Perancangan aplikasi mobile yang user-friendly untuk platform iOS dan Android.
+                        Ajak masyarakat untuk memahami pentingnya pengelolaan sampah yang baik melalui seminar atau
+                        workshop.
                     </p>
-                    {{-- <a href="#" class="text-[#52a08a] font-semibold hover:underline">Selengkapnya</a> --}}
                 </div>
+                <!-- Tip 3 -->
                 <div
                     class="bg-white rounded-3xl shadow-xl p-8 flex flex-col items-center hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="bg-[#52a08a]/10 rounded-full p-5 mb-6">
-                        <svg class="w-12 h-12 text-[#52a08a]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    <div class="bg-[#5A7863]/10 rounded-full p-5 mb-6">
+                        <svg class="w-12 h-12 text-[#5A7863]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961" />
+                                d="M3 12h18M3 16h18M3 8h18" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3 text-[#23272F]">Network</h3>
+                    <h3 class="text-2xl font-semibold mb-3 text-[#23272F]">Gunakan Aplikasi</h3>
                     <p class="text-gray-600 text-center mb-4">
-                        Perancangan jaringan komputer yang optimal dan aman untuk mendukung bisnis Anda.
+                        Manfaatkan aplikasi pengelolaan sampah untuk memantau dan mengatur jadwal pengambilan sampah.
                     </p>
-                    {{-- <a href="#" class="text-[#52a08a] font-semibold hover:underline">Selengkapnya</a> --}}
                 </div>
-                <!-- Service 2 -->
-
             </div>
         </div>
-        <div class="absolute top-0 left-0 w-32 h-32 bg-[#52a08a]/10 rounded-full blur-2xl -z-10"></div>
-        <div class="absolute bottom-0 right-0 w-48 h-48 bg-[#578E7E]/10 rounded-full blur-3xl -z-10"></div>
-    </section>
-
-    {{-- Our Team --}}
-    <section>
-
+        <div class="absolute top-0 left-0 w-32 h-32 bg-[#5A7863]/10 rounded-full blur-2xl -z-10"></div>
+        <div class="absolute bottom-0 right-0 w-48 h-48 bg-[#5A7863]/10 rounded-full blur-3xl -z-10"></div>
     </section>
 @endsection

@@ -72,4 +72,32 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
 
+    public function indexHome()
+    {
+        return view('user.home');
+    }
+
+    public function indexProfile()
+    {
+        // $user = auth()->user();
+        return view('user.profile');
+        // return view('user.profile', compact('user'));
+    }
+
+    public function indexEditProfile()
+    {
+        // $user = auth()->user();
+        return view('user.edit-profile', compact('user'));
+    }
+
+    public function indexSchedule()
+    {
+        return view('user.schedule');
+    }
+
+    public function indexScheduleForm()
+    {
+        return view('user.schedule-form');
+    }
+
 }

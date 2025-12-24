@@ -1,34 +1,53 @@
-<header id="main-header" class="absolute top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent">
+<header id="main-header" class="absolute top-0 left-0 w-full z-50 transition-all duration-300 bg-white shadow-md">
     <nav class="container mx-auto flex items-center justify-between py-4 px-6">
-        <div id="logo-text" class="flex items-center gap-2 text-xl font-bold text-white transition-colors duration-300">
-            <img src="{{ asset('assets/logo-djingga.png') }}" alt="Djingga Logo" class="h-8 w-auto">
-            <span>BaliGreen</span>
+        <div id="logo-text" class="flex items-center gap-2 text-xl font-bold transition-colors duration-300 cursor-pointer" style="--hover-color: #5A7863;">
+            <span>SAMDES</span>
         </div>
-        @php
-            // determine active nav by current route/path
-            $isHome = request()->routeIs('home') || request()->is('/');
-            $isProfile = request()->routeIs('profile') || request()->is('profile*');
-            $isProject = request()->is('project*') || request()->routeIs('project');
-            $isActivity = request()->is('activity*') || request()->routeIs('activity');
-            $isConsultation = request()->is('consultation*') || request()->routeIs('consultation');
-        @endphp
 
-        <ul class="flex space-x-6">
+        <ul class="flex space-x-8">
             <li>
-                <a href="{{ route('home') }}" class="nav-link {{ $isHome ? 'active' : '' }} text-white transition-colors duration-300">Beranda</a>
+                <a href="#home" class="nav-link text-gray-700 font-medium transition-all duration-300 pb-1" data-section="home" style="--hover-color: #5A7863;">Beranda</a>
             </li>
             <li>
-                <a href="{{ route('profile') }}" class="nav-link {{ $isProfile ? 'active' : '' }} text-white transition-colors duration-300">Profil</a>
+                <a href="#about" class="nav-link text-gray-700 font-medium transition-all duration-300 pb-1" data-section="about" style="--hover-color: #5A7863;">Tentang Kami</a>
             </li>
             <li>
-                <a href="{{ route('project') }}" class="nav-link {{ $isProject ? 'active' : '' }} text-white transition-colors duration-300">Project</a>
-            </li>
-            <li>
-                <a href="{{ route('activity') }}" class="nav-link {{ $isActivity ? 'active' : '' }} text-white transition-colors duration-300">Aktivitas</a>
-            </li>
-            <li>
-                <a href="{{ route('consultation') }}" class="nav-link {{ $isConsultation ? 'active' : '' }} text-white transition-colors duration-300">Konsultasi</a>
+                <a href="#tips" class="nav-link text-gray-700 font-medium transition-all duration-300 pb-1" data-section="tips" style="--hover-color: #5A7863;">Tips & Trik</a>
             </li>
         </ul>
     </nav>
 </header>
+
+<style>
+    #logo-text:hover {
+        color: #5A7863;
+    }
+
+    .nav-link:hover {
+        color: #5A7863;
+        border-bottom: 2px solid #5A7863;
+    }
+</style>
+
+<script>
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        navLinks.forEach(link => {
+            const section = document.getElementById(link.dataset.section);
+            if (section && section.offsetTop <= window.scrollY + 100) {
+                current = link.dataset.section;
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.style.color = '';
+            link.style.borderBottom = '';
+            if (link.dataset.section === current) {
+                link.style.color = '#5A7863';
+                link.style.borderBottom = '2px solid #5A7863';
+            }
+        });
+    });
+</script>
