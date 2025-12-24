@@ -100,4 +100,9 @@ class UserController extends Controller
         return view('user.schedule-form');
     }
 
+    public function indexTransaction()
+    {
+        return view('user.transaction');
+    }
+
 }

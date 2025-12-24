@@ -13,6 +13,6 @@ Route::controller(\App\Http\Controllers\UserController::class)->group(function (
     Route::get('/', 'indexHome')->name('home.index');
     Route::get('/profile', 'indexProfile')->name('profile.index');
     Route::get('/edit-profile', 'indexEditProfile')->name('edit.profile.index');
-    Route::get('/schedule', 'indexScheduleProfile')->name('schedule.index');
+    Route::get('/schedule', 'indexSchedule')->name('schedule.index');
     Route::get('/transaction', 'indexTransaction')->name('transaction.index');
 });

@@ -13,8 +13,11 @@
     <div class="sticky top-0 z-50">
         @include('components.header')
     </div>
-    <main class="@if (Route::currentRouteName() == 'profile.index') flex @endif">
-        @if (Route::currentRouteName() == 'profile.index')
+    @php
+        $showSidebar = in_array(Route::currentRouteName(), ['profile.index', 'schedule.index', 'transaction.index']);
+    @endphp
+    <main class="@if($showSidebar) flex @endif">
+        @if($showSidebar)
             <aside class="w-64 min-h-screen mt-20 mx-4 mb-4">
                 @include('components.user-sidebar')
             </aside>
