@@ -64,45 +64,95 @@ class UserController extends Controller
         return view('admin.users.detail', compact('user'));
     }
 
-    public function deleteUser($id)
-    {
-        $user = \App\Models\User::findOrFail($id);
-        $user->delete();
+    // public function deleteUser($id)
+    // {
+    //     $user = \App\Models\User::findOrFail($id);
+    //     $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
-    }
+    //     return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
+    // }
 
     public function indexHome()
     {
-        return view('user.home');
+        return view('user.landing-page.home');
     }
 
     public function indexProfile()
     {
         // $user = auth()->user();
-        return view('user.profile');
+        return view('user.profile.profile');
         // return view('user.profile', compact('user'));
     }
 
     public function indexEditProfile()
     {
         // $user = auth()->user();
-        return view('user.edit-profile', compact('user'));
+        return view('user.profile.edit-profile', compact('user'));
     }
 
     public function indexSchedule()
     {
-        return view('user.schedule');
+        return view('user.schedule.schedule');
     }
 
     public function indexScheduleForm()
     {
-        return view('user.schedule-form');
+        return view('user.schedule.schedule-form');
     }
 
     public function indexTransaction()
     {
-        return view('user.transaction');
+        return view('user.transaction.transaction');
     }
 
+    public function storeAddUser(Request $request)
+    {
+        $validate = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:500',
+            'password' => 'required|string|min:8',
+            'role' => 'required|in:warga,desa',
+        ]);
+
+        \App\Models\User::create([
+            'name' => $validate['name'],
+            'email' => $validate['email'],
+            'phone' => $validate['phone'],
+            'address' => $validate['address'],
+            'password' => $validate['password'],
+            'role' => $validate['role'],
+        ]);
+
+        return redirect()->route('admin.manage-user.index')->with('success', 'User berhasil ditambahkan!');
+    }
+
+    public function UpdateUser(Request $request, $id)
+    {
+        $user = \App\Models\User::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'role' => 'required|in:warga,desa',
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        if (empty($validated['password'])) unset($validated['password']);
+
+        $user->update($validated);
+
+        return redirect()->route('admin.manage-user.index')->with('success', 'User updated.');
+    }
+
+    public function deleteUser($id)
+    {
+        $user = \App\Models\User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.manage-user.index')->with('success', 'User deleted successfully.');
+    }
 }

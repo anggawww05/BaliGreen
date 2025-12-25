@@ -1,4 +1,4 @@
-@extends('user.main')
+@extends('user.layout.main')
 
 @section('container')
     <div class="w-full min-h-screen bg-white">
@@ -19,7 +19,6 @@
                 </div>
             </div>
 
-            <!-- Profile Information -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                 <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-300">
                     <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b-2 border-[#6F8E78]">Informasi Pribadi

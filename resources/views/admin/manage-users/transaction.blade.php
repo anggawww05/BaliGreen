@@ -1,30 +1,33 @@
-@extends('user.main')
+@extends('admin.layout.main')
 
 @section('container')
-    <div class="w-full min-h-screen bg-white border border-gray-300 rounded-xl p-6">
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+    <div class="min-h-screen bg-gray-50 p-6 border border-gray-200 rounded-xl flex flex-col gap-2">
+        <h1 class="text-2xl font-semibold text-gray-800">Kelola Pembayaran</h1>
+        <div>
+            <a href="{{ route('admin.manage-user.index') }}" class="text-sm text-gray-600 hover:underline">/Kelola Pengguna</a><span class="text-sm text-gray-800 font-semibold">/Pembayaran</span>
+        </div>
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
             <div class="relative w-full sm:w-1/2">
-                <input type="text" placeholder="Cari penjadwalan..."
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" placeholder="Cari pengguna..."
+                    class="w-1/2 pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 text-sm">
                 <svg class="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
             </div>
-            <button
-                class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">Buat
-                Penjadwalan</button>
+            <a href="{{ route('admin.add-transaction.index') }}"
+                class="w-full sm:w-auto px-6 py-2  bg-linear-to-r from-[#6F8E78] to-[#5A7863] text-white font-medium rounded-xl hover:from-[#5A7863] hover:to-[#4A6853] transition">Tambah</a>
         </div>
         <div class="bg-white rounded-xl shadow-lg border border-gray-300 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-gray-50 border-b border-gray-200">
                         <tr>
-                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">No</th>
-                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Judul</th>
-                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Deskripsi</th>
-                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Tanggal</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">#</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Bulan</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Batas Pembayaran</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Tanggal Pembayaran</th>
                             <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
                             <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Aksi</th>
                         </tr>
@@ -32,22 +35,10 @@
                     @php
                         $dummySchedules = [
                             (object) [
-                                'title' => 'Meeting with Team',
-                                'description' => 'Discuss project updates',
-                                'date' => '2023-10-01',
-                                'status' => 'Scheduled',
-                            ],
-                            (object) [
-                                'title' => 'Client Presentation',
-                                'description' => 'Present the new features',
-                                'date' => '2023-10-05',
-                                'status' => 'Scheduled',
-                            ],
-                            (object) [
-                                'title' => 'Code Review',
-                                'description' => 'Review the latest pull requests',
-                                'date' => '2023-10-10',
-                                'status' => 'Pending',
+                                'month' => 'Januari',
+                                'payment_deadline' => '123 Main St',
+                                'payment_date' => '',
+                                'status' => 'Menunggu',
                             ],
                         ];
                     @endphp
@@ -57,22 +48,25 @@
                             <tr class="hover:bg-[#52a08a]/5 transition-colors duration-150">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {{ $loop->iteration }}</td>
-                                <td class="px-6 py-4 text-sm font-semibold text-[#23272F]">{{ $schedule->title }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
+                                    {{ $schedule->month }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600 max-w-md">
-                                    {{ Str::limit($schedule->description, 80) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $schedule->date }}</td>
+                                    {{ Str::limit($schedule->payment_deadline, 80) }}</td>
+                                @if ($schedule->payment_date == '')
+                                    <td class="px-6 py-4 text-sm text-gray-600">-</td>
+                                @else
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $schedule->payment_date }}</td>
+                                @endif
                                 <td class="px-6 py-4 text-sm">
-                                    <span class="px-3 py-1 bg-[#52a08a]/10 text-[#52a08a] rounded-full text-xs font-semibold">{{ $schedule->status }}</span>
+                                    <span
+                                        class="px-3 py-1 bg-[#52a08a]/10 text-[#52a08a] rounded-full text-xs font-semibold">{{ $schedule->status }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="#"
-                                            class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors">Edit</a>
-                                        <form method="POST" onsubmit="return confirm('Yakin ingin menghapus?');">
-                                            @csrf @method('DELETE')
-                                            <button type="submit"
-                                                class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors">Hapus</button>
-                                        </form>
+                                            class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors">Detail</a>
+                                        <a href="#"
+                                            class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors">Konfirmasi</a>
                                     </div>
                                 </td>
                             </tr>
@@ -93,6 +87,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{-- {{ $dummySchedules->links('components.pagination') }} --}}
             </div>
         </div>
     </div>

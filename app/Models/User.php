@@ -27,6 +27,11 @@ class User extends Authenticatable
         'phone',
     ];
 
+    const ROLE_ENUM = [
+        'warga' => 'Warga',
+        'desa' => 'Desa',
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -46,7 +51,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            // 'password' => 'hashed',
         ];
     }
 

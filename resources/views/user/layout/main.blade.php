@@ -14,7 +14,7 @@
         @include('components.header')
     </div>
     @php
-        $showSidebar = in_array(Route::currentRouteName(), ['profile.index', 'schedule.index', 'transaction.index']);
+        $showSidebar = in_array(Route::currentRouteName(), ['profile.index', 'schedule.index', 'schedule.form', 'transaction.index', 'transaction.form']);
     @endphp
     <main class="@if($showSidebar) flex @endif">
         @if($showSidebar)

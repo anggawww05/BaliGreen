@@ -16,13 +16,9 @@
         </div>
 
         <div class="flex items-center space-x-3">
-            <div
-                class="w-8 h-8 bg-linear-to-br from-[#52a08a] to-[#578E7E] rounded-full flex items-center justify-center">
-                <span class="text-white font-semibold text-sm">S</span>
-            </div>
-            <div class="hidden md:block text-left">
+            <a href="{{ route('admin.edit-profile.index') }}" class="hidden md:block text-left hover:opacity-80 transition-opacity">
                 <p class="text-sm font-medium text-[#23272F]">Super Admin</p>
-            </div>
+            </a>
         </div>
 
     </div>

@@ -1,4 +1,4 @@
-@extends('user.main')
+@extends('user.layout.main')
 
 @section('container')
     <section id="home"

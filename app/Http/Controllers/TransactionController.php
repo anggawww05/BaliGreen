@@ -8,7 +8,7 @@ class TransactionController extends Controller
 {
     public function showTransaction()
     {
-        return view('transactions.show');
+        return view('user.transaction.transaction-form');
     }
 
     public function storeTransaction(Request $request)

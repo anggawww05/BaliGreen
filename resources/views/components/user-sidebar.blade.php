@@ -11,13 +11,13 @@
             class="block px-4 py-2 rounded-lg transition-colors duration-200 {{ $isActive ? 'bg-linear-to-r from-[#6F8E78] to-[#5A7863] text-white' : 'text-gray-700 hover:bg-linear-to-r hover:from-[#6F8E78] hover:to-[#5A7863] hover:text-white' }}">
             <h1 class="font-medium">Profil</h1>
         </a>
-        @php $isActive = request()->routeIs('schedule.index'); @endphp
+        @php $isActive = request()->routeIs('schedule.index', 'schedule.form'); @endphp
         <a href="{{ route('schedule.index') }}"
             class="block px-4 py-2 rounded-lg transition-colors duration-200 {{ $isActive ? 'bg-linear-to-r from-[#6F8E78] to-[#5A7863] text-white' : 'text-gray-700 hover:bg-linear-to-r hover:from-[#6F8E78] hover:to-[#5A7863] hover:text-white' }}">
             <h1 class="font-medium">Penjadwalan</h1>
         </a>
-        @php $isActive = request()->routeIs('transaction.index'); @endphp
-        <a href="{{ route('transaction.index') }}"
+        @php $isActive = request()->routeIs('transaction.index', 'transaction.form'); @endphp
+        <a href="#"
             class="block px-4 py-2 rounded-lg transition-colors duration-200 {{ $isActive ? 'bg-linear-to-r from-[#6F8E78] to-[#5A7863] text-white' : 'text-gray-700 hover:bg-linear-to-r hover:from-[#6F8E78] hover:to-[#5A7863] hover:text-white' }}">
             <h1 class="font-medium">Pembayaran</h1>
         </a>

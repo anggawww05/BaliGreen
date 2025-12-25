@@ -3,39 +3,84 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PickupRequest;
+use App\Models\WasteCategory;
 
 class PickupController extends Controller
 {
+    // Mapping ukuran ke estimated weight (kg)
+    private const SIZE_WEIGHT_MAP = [
+        'S' => 1.5,   // Kecil
+        'M' => 3.0,   // Sedang
+        'L' => 5.0,   // Besar
+        'XL' => 8.0,  // Jumbo
+    ];
+
     public function showFormPickup()
     {
-        return view('user.pickup_form');
+        $wasteCategories = WasteCategory::all();
+        return view('user.schedule.schedule-form', compact('wasteCategories'));
     }
 
     public function storeFormPickup(Request $request)
     {
         $validatedData = $request->validate([
-            'pickup_date' => 'required|date|after:today',
-            'address' => 'required|string|max:500',
             'items' => 'required|array|min:1',
             'items.*.waste_category_id' => 'required|exists:waste_categories,id',
             'items.*.size' => 'required|string|in:S,M,L,XL',
-            'items.*.estimated_weight' => 'required|numeric|min:0.1',
-            'items.*.is_wet' => 'required|boolean',
-            'items.*.has_smell' => 'required|boolean',
+            'items.*.is_wet' => 'nullable|boolean',
+            'items.*.has_smell' => 'nullable|boolean',
+            'sorting_photo_path' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
-        $pickupRequest = \App\Models\PickupRequest::create([
-            'user_id' => auth()->id(),
-            'pickup_date' => $validatedData['pickup_date'],
-            'address' => $validatedData['address'],
-            'status' => 'pending',
-        ]);
-
-        foreach ($validatedData['items'] as $itemData) {
-            $pickupRequest->items()->create($itemData);
+        // Handle photo upload
+        $photoPath = null;
+        if ($request->hasFile('sorting_photo_path')) {
+            $photoPath = $request->file('sorting_photo_path')->store('sorting_photos', 'public');
         }
 
-        return redirect()->route('user.dashboard')->with('success', 'Pickup request submitted successfully.');
+        // Create pickup request
+        $pickupRequest = PickupRequest::create([
+            'user_id' => auth()->id(),
+            'status' => 'pending',
+            'sorting_photo_path' => $photoPath,
+            'notes' => $validatedData['notes'] ?? null,
+            'is_sorted_confirmed' => true,
+        ]);
+
+        // Create pickup items with calculated weight
+        $totalWeight = 0;
+        $maxRiskLevel = 0;
+
+        foreach ($validatedData['items'] as $itemData) {
+            // Calculate estimated weight based on size
+            $estimatedWeight = self::SIZE_WEIGHT_MAP[$itemData['size']];
+
+            // Get waste category for risk level
+            $wasteCategory = WasteCategory::find($itemData['waste_category_id']);
+            if ($wasteCategory) {
+                $maxRiskLevel = max($maxRiskLevel, $wasteCategory->risk_level);
+            }
+
+            $pickupRequest->items()->create([
+                'waste_category_id' => $itemData['waste_category_id'],
+                'size' => $itemData['size'],
+                'estimated_weight' => $estimatedWeight,
+                'is_wet' => $itemData['is_wet'] ?? false,
+                'has_smell' => $itemData['has_smell'] ?? false,
+            ]);
+
+            $totalWeight += $estimatedWeight;
+        }
+
+        // Update total weight dan max risk level
+        $pickupRequest->update([
+            'total_weight_kg' => $totalWeight,
+            'max_risk_level' => $maxRiskLevel,
+        ]);
+
+        return redirect()->route('schedule.index')->with('success', 'Penjadwalan sampah berhasil dibuat!');
     }
 
     public function showTablePriority()
