@@ -27,10 +27,17 @@
                 Platform pengelolaan sampah desa digital yang dirancang untuk membantu desa mengelola limbah secara efisien
                 dan berkelanjutan.
             </p>
-            <a href="{{ route('login.index') }}"
-                class="inline-block bg-[#5A7863] hover:bg-[#466e62] text-white font-semibold py-4 px-10 rounded-full shadow-2xl transition text-lg">
-                Mulai Sekarang
-            </a>
+            @if (!auth()->user())
+                <a href="{{ route('login.index') }}"
+                    class="inline-block bg-[#5A7863] hover:bg-[#466e62] text-white font-semibold py-4 px-10 rounded-full shadow-2xl transition text-lg">
+                    Mulai Sekarang
+                </a>
+            @else
+                <a href="{{ route('profile.index') }}"
+                    class="inline-block bg-[#5A7863] hover:bg-[#466e62] text-white font-semibold py-4 px-10 rounded-full shadow-2xl transition text-lg">
+                    Dashboard
+                </a>
+            @endif
         </div>
     </section>
 

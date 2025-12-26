@@ -43,7 +43,7 @@
                         <p class="text-sm text-gray-500">Isi data di bawah untuk mulai menggunakan layanan.</p>
                     </div>
 
-                    <form class="space-y-6" action="#" method="POST" id="dummy-register-form">
+                    <form class="space-y-6" action="{{ route('validate.login') }}" method="POST" id="dummy-register-form">
                         @csrf
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700" for="email">Email</label>
@@ -74,7 +74,7 @@
                             @enderror
                         </div>
                         <button
-                            type="button"
+                            type="submit"
                             class="flex w-full items-center justify-center gap-2 rounded-full bg-[#5A7863] px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#4a6553] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#5A7863]"
                         >
                             Masuk Sekarang

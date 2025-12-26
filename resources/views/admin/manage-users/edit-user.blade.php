@@ -13,8 +13,7 @@
             <div class="space-y-4">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
-                    {{-- <input type="text" id="name" name="name" required
-                        class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F8E78]"> --}}
+
                     <input type="text" id="name" name="name" required value="{{ old('name', $user->name) }}"
                         class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F8E78]">
                 </div>
@@ -34,9 +33,9 @@
                         class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F8E78]"></textarea>
                 </div>
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password<span class="text-xs text-gray-500 font-normal">(Kosongkan jika tidak ingin mengganti)</span></label>
                     <div class="relative">
-                        <input type="password" id="password" name="password" value="{{ old('password', $user->password) }}"
+                        <input type="password" id="password" name="password"
                             class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F8E78]">
                         <button type="button" onclick="togglePassword()"
                             class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800">

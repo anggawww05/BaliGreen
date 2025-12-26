@@ -31,38 +31,31 @@
                             <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Aksi</th>
                         </tr>
                     </thead>
-                    @php
-                        $dummySchedules = [
-                            (object) [
-                                'name' => 'John Doe',
-                                'weight' => '10 kg',
-                                'urgency_score' => '5',
-                                'status' => 'Pending',
-                            ],
-                        ];
-                    @endphp
 
                     <tbody class="divide-y divide-gray-200">
-                        @forelse ($dummySchedules as $schedule)
+                        @forelse ($pickupRequests as $pickupRequest)
                             <tr class="hover:bg-[#52a08a]/5 transition-colors duration-150">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                                    {{ $schedule->name }}</td>
+                                    {{ $pickupRequest->user->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600 max-w-md">
-                                    {{ Str::limit($schedule->weight, 80) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $schedule->urgency_score }}</td>
+                                    {{ $pickupRequest->total_weight_kg }} kg</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $pickupRequest->current_priority_score }}</td>
                                 <td class="px-6 py-4 text-sm">
                                     <span
-                                        class="px-3 py-1 bg-[#52a08a]/10 text-[#52a08a] rounded-full text-xs font-semibold">{{ $schedule->status }}</span>
+                                        class="px-3 py-1 bg-[#52a08a]/10 text-[#52a08a] rounded-full text-xs font-semibold">{{ $pickupRequest->status }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <button type="button" data-modal-target="verifyModal"
+                                            data-pickup-id="{{ $pickupRequest->id }}"
+                                            data-is-confirmed="{{ $pickupRequest->is_sorted_confirmed }}"
+                                            data-photo-path="{{ $pickupRequest->sorting_photo_path ? asset('storage/' . $pickupRequest->sorting_photo_path) : 'https://via.placeholder.com/400x300?text=No+Image' }}"
                                             class="open-modal inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors">
                                             Verifikasi Pemilahan
                                         </button>
-                                        <a href="{{ route('admin.detail-pickup.index') }}"
+                                        <a href="{{ route('admin.detail-pickup.index', $pickupRequest->id) }}"
                                             class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors">Detail
                                             Penjemputan</a>
                                     </div>
@@ -94,23 +87,31 @@
             <div class="px-6 py-4 border-b border-gray-300">
                 <h3 class="text-lg font-semibold text-gray-800">Verifikasi Pemilahan</h3>
             </div>
-            <div class="px-6 py-4 space-y-2">
-                <label for="name" class="block text-sm font-medium text-gray-700">Foto Sampah</label>
-                <div class="w-full h-48 bg-gray-400 rounded-lg"></div>
-                <label for="verification" class="block text-sm font-medium text-gray-700 mt-4">Status Verifikasi</label>
-                <select id="verification" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                    <option value="">Pilih Status</option>
-                    <option value="approved">Terpilah</option>
-                    <option value="rejected">Tercampur</option>
-                </select>
-            </div>
+            <form id="verifyForm" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" id="pickupId" name="pickup_id" value="">
+                <div class="px-6 py-4 space-y-2">
+                    <label for="name" class="block text-sm font-medium text-gray-700">Foto Sampah</label>
+                    <img id="photoPreview" src="" alt="Foto Sampah"
+                        class="w-full h-48 rounded-lg object-cover border border-gray-300">
+                    <label for="verification" class="block text-sm font-medium text-gray-700 mt-4">Status Verifikasi</label>
+                    <select id="verification" name="verification"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                        required>
+                        <option value="">Pilih Status</option>
+                        <option value="approved">Terpilah</option>
+                        <option value="rejected">Tercampur</option>
+                    </select>
+                </div>
 
-            <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3">
-                <button type="button"
-                    class="close-modal px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Batal</button>
-                <a href="{{ route('admin.edit-user.index') }}"
-                    class="px-4 py-2 text-sm rounded-lg bg-blue-500 hover:bg-blue-600 text-white">Ya, Verifikasi</a>
-            </div>
+                <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3">
+                    <button type="button"
+                        class="close-modal px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Batal</button>
+                    <button type="submit"
+                        class="px-4 py-2 text-sm rounded-lg bg-blue-500 hover:bg-blue-600 text-white">Ya,
+                        Verifikasi</button>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
@@ -118,9 +119,36 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('verifyModal');
+        const verifyForm = document.getElementById('verifyForm');
+        const pickupIdInput = document.getElementById('pickupId');
+        const photoPreview = document.getElementById('photoPreview');
+
+        document.querySelectorAll('.open-modal').forEach(btn => {
+            const isConfirmed = btn.getAttribute('data-is-confirmed');
+
+            if (isConfirmed !== null && isConfirmed !== '') {
+                btn.style.display = 'none';
+            }
+        });
+
         document.querySelectorAll('.open-modal').forEach(btn => {
             btn.addEventListener('click', e => {
                 e.preventDefault();
+
+                const pickupId = btn.getAttribute('data-pickup-id');
+                const photoPath = btn.getAttribute('data-photo-path');
+
+                pickupIdInput.value = pickupId;
+                verifyForm.action = `/request-pickup/verify-sorted/${pickupId}`;
+
+                if (photoPath && photoPath !== 'https://via.placeholder.com/400x300?text=No+Image') {
+                    photoPreview.src = photoPath;
+                    photoPreview.style.display = 'block';
+                } else {
+                    photoPreview.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                    photoPreview.style.display = 'block';
+                }
+
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
             });
@@ -129,7 +157,9 @@
         const closeModal = () => {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
+            photoPreview.src = '';
         };
+
         modal.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', closeModal));
         modal.addEventListener('click', e => {
             if (e.target === modal) closeModal();

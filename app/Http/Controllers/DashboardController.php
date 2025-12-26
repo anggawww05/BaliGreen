@@ -36,16 +36,6 @@ class DashboardController extends Controller
         return view('admin.manage-users.edit-user', compact('user', 'roles'));
     }
 
-    public function indexRequestPickup()
-    {
-        return view('admin.request-pickup.table-request-pickup');
-    }
-
-    public function indexDetailPickup()
-    {
-        return view('admin.request-pickup.detail-request-pickup');
-    }
-
     public function indexTransaction()
     {
         return view('admin.manage-users.transaction');

@@ -12,7 +12,9 @@
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
             </div>
-            <a href="{{ route('schedule.form') }}" class="w-full sm:w-auto px-6 py-2  bg-linear-to-r from-[#6F8E78] to-[#5A7863] text-white font-medium rounded-lg hover:from-[#5A7863] hover:to-[#4A6853] transition">Buat Penjadwalan</a>
+            <a href="{{ route('schedule.form') }}"
+                class="w-full sm:w-auto px-6 py-2  bg-linear-to-r from-[#6F8E78] to-[#5A7863] text-white font-medium rounded-lg hover:from-[#5A7863] hover:to-[#4A6853] transition">Buat
+                Penjadwalan</a>
         </div>
         <div class="bg-white rounded-xl shadow-lg border border-gray-300 overflow-hidden">
             <div class="overflow-x-auto">
@@ -27,45 +29,29 @@
                             <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Aksi</th>
                         </tr>
                     </thead>
-                    @php
-                        $dummySchedules = [
-                            (object) [
-                                'weight' => '10kg',
-                                'note' => 'Discuss project updates',
-                                'date' => '2023-10-01',
-                                'status' => 'Scheduled',
-                            ],
-                            (object) [
-                                'weight' => '10kg',
-                                'note' => 'Present the new features',
-                                'date' => '2023-10-05',
-                                'status' => 'Scheduled',
-                            ],
-                            (object) [
-                                'weight' => '10kg',
-                                'note' => 'Review the latest pull requests',
-                                'date' => '2023-10-10',
-                                'status' => 'Pending',
-                            ],
-                        ];
-                    @endphp
-
                     <tbody class="divide-y divide-gray-200">
-                        @forelse ($dummySchedules as $schedule)
+                        @forelse ($schedules as $schedule)
                             <tr class="hover:bg-[#52a08a]/5 transition-colors duration-150">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                                    {{ $schedule->weight }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600 max-w-md">
-                                    {{ Str::limit($schedule->note, 80) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $schedule->date }}</td>
+                                    {{ $schedule->total_weight_kg }} kg</td>
+                                @if ($schedule->notes == 0)
+                                    <td class="px-6 py-4 text-sm text-gray-600 max-w-md">
+                                        -</td>
+                                @else
+                                    <td class="px-6 py-4 text-sm text-gray-600 max-w-md">
+                                        {{ Str::limit($schedule->notes, 80) }}</td>
+                                @endif
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $schedule->created_at->format('Y-m-d') }}
+                                </td>
                                 <td class="px-6 py-4 text-sm">
-                                    <span class="px-3 py-1 bg-[#52a08a]/10 text-[#52a08a] rounded-full text-xs font-semibold">{{ $schedule->status }}</span>
+                                    <span
+                                        class="px-3 py-1 bg-[#52a08a]/10 text-[#52a08a] rounded-full text-xs font-semibold">{{ $schedule->status }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        <a href="#"
+                                        <a href="{{ route('schedule-edit.form', $schedule->id) }}"
                                             class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors">Edit</a>
                                         <form method="POST" onsubmit="return confirm('Yakin ingin menghapus?');">
                                             @csrf @method('DELETE')

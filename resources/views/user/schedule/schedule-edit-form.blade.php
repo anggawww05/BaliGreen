@@ -9,11 +9,12 @@
                 </svg>
                 Kembali
             </a>
-            <h1 class="text-xl font-bold">Formulir Penjadwalan Sampah</h1>
+            <h1 class="text-xl font-bold">Edit Formulir Penjadwalan Sampah</h1>
         </div>
 
-        <form method="POST" action="{{ route('schedule.store') }}" enctype="multipart/form-data" class="w-full">
+        <form method="POST" action="{{ route('schedule.update', $pickupRequest->id) }}" enctype="multipart/form-data" class="w-full">
             @csrf
+            @method('PUT')
 
             <!-- Section: Daftar Sampah -->
             <div class="bg-gray-50 border border-gray-300 rounded-lg p-6 mb-6">
@@ -29,7 +30,7 @@
 
                 <!-- Waste Items Container -->
                 <div id="waste-items-container" class="space-y-4">
-                    <!-- First item template will be added here -->
+                    <!-- Items will be loaded here -->
                 </div>
 
                 @if ($errors->has('items'))
@@ -56,10 +57,21 @@
                                 <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Klik untuk upload</span> atau drag and drop</p>
                                 <p class="text-xs text-gray-500">PNG, JPG, GIF hingga 10MB</p>
                             </div>
-                            <input type="file" id="sorting_photo_path" name="sorting_photo_path" class="hidden" accept="image/*" required>
+                            <input type="file" id="sorting_photo_path" name="sorting_photo_path" class="hidden" accept="image/*">
                         </label>
                     </div>
-                    <div id="photo-preview" class="mt-2"></div>
+                    <div id="photo-preview" class="mt-2">
+                        @if ($pickupRequest->sorting_photo_path)
+                            <div class="relative inline-block">
+                                <img src="{{ asset('storage/' . $pickupRequest->sorting_photo_path) }}" alt="Preview" class="h-32 rounded-lg border border-gray-300">
+                                <button type="button" onclick="document.getElementById('sorting_photo_path').value = ''; document.getElementById('photo-preview').innerHTML = ''" class="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        @endif
+                    </div>
                     @if ($errors->has('sorting_photo_path'))
                         <p class="text-red-600 text-sm mt-2">{{ $errors->first('sorting_photo_path') }}</p>
                     @endif
@@ -70,7 +82,7 @@
                     <label for="notes" class="block text-sm font-medium text-gray-900 mb-2">
                         Catatan untuk Petugas (Opsional)
                     </label>
-                    <textarea id="notes" name="notes" rows="4" placeholder="Misal: Pagar digembok, ada anjing, dll..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    <textarea id="notes" name="notes" rows="4" placeholder="Misal: Pagar digembok, ada anjing, dll..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ $pickupRequest->notes }}</textarea>
                     @if ($errors->has('notes'))
                         <p class="text-red-600 text-sm mt-2">{{ $errors->first('notes') }}</p>
                     @endif
@@ -83,7 +95,7 @@
                     Batal
                 </a>
                 <button type="submit" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium">
-                    Buat Penjadwalan
+                    Perbarui Penjadwalan
                 </button>
             </div>
         </form>
@@ -164,9 +176,19 @@
     <script>
         let itemCount = 0;
 
-        // Initialize with one empty item
+        // Initialize with existing items
         document.addEventListener('DOMContentLoaded', function() {
-            addWasteItem();
+            const items = @json($pickupRequest->items ?? []);
+            console.log('Loaded items:', items);
+
+            if (items.length > 0) {
+                items.forEach(item => {
+                    console.log('Adding item:', item);
+                    addWasteItem(item);
+                });
+            } else {
+                addWasteItem();
+            }
 
             // Photo preview handler
             document.getElementById('sorting_photo_path').addEventListener('change', function(e) {
@@ -192,7 +214,7 @@
             });
         });
 
-        function addWasteItem() {
+        function addWasteItem(item = null) {
             const container = document.getElementById('waste-items-container');
             const template = document.getElementById('waste-item-template');
             const clone = template.content.cloneNode(true);
@@ -206,8 +228,28 @@
             inputs.forEach(input => {
                 if (input.name) {
                     input.name = input.name.replace(/items\[0\]/g, `items[${itemCount}]`);
+
+                    // Set values if editing
+                    if (item) {
+                        if (input.type === 'radio' && input.value === item.size) {
+                            input.checked = true;
+                        } else if (input.type === 'checkbox') {
+                            if ((input.name.includes('is_wet') && (item.is_wet === 1 || item.is_wet === true)) ||
+                                (input.name.includes('has_smell') && (item.has_smell === 1 || item.has_smell === true))) {
+                                input.checked = true;
+                            }
+                        }
+                    }
                 }
             });
+
+            // Set select value if editing
+            if (item) {
+                const select = clone.querySelector('select');
+                if (select) {
+                    select.value = item.waste_category_id;
+                }
+            }
 
             container.appendChild(clone);
             itemCount++;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -17,10 +18,35 @@ class UserController extends Controller
         $user = \App\Models\User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            'password' => $validatedData['password'],
+            // Always store hashed passwords
+            'password' => Hash::make($validatedData['password']),
         ]);
 
         return redirect()->route('login.index')->with('success', 'User registered successfully.');
+    }
+
+    public function UpdateProfileUser(Request $request)
+    {
+        $user = auth()->user();
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        if (!empty($validated['password'])) {
+
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return redirect()->route('profile.index')->with('success', 'User updated.');
     }
 
     public function showTableUsers()
@@ -29,11 +55,6 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    public function showEditUser($id)
-    {
-        $user = \App\Models\User::findOrFail($id);
-        return view('admin.users.edit', compact('user'));
-    }
 
     public function storeUpdateUser(Request $request, $id)
     {
@@ -48,7 +69,8 @@ class UserController extends Controller
         ]);
 
         if (isset($validatedData['password'])) {
-            $validatedData['password'] = $validatedData['password'];
+            // Hash password when provided
+            $validatedData['password'] = Hash::make($validatedData['password']);
         } else {
             unset($validatedData['password']);
         }
@@ -72,28 +94,29 @@ class UserController extends Controller
     //     return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     // }
 
-    public function indexHome()
-    {
-        return view('user.landing-page.home');
-    }
+    // public function indexHome()
+    // {
 
-    public function indexProfile()
-    {
-        // $user = auth()->user();
-        return view('user.profile.profile');
-        // return view('user.profile', compact('user'));
-    }
+    //     return view('user.landing-page.home');
+    // }
 
-    public function indexEditProfile()
-    {
-        // $user = auth()->user();
-        return view('user.profile.edit-profile', compact('user'));
-    }
+    // public function indexProfile()
+    // {
+    //     // $user = auth()->user();
+    //     return view('user.profile.profile');
+    //     // return view('user.profile', compact('user'));
+    // }
 
-    public function indexSchedule()
-    {
-        return view('user.schedule.schedule');
-    }
+    // public function indexEditProfile()
+    // {
+    //     // $user = auth()->user();
+    //     return view('user.profile.edit-profile', compact('user'));
+    // }
+
+    // public function indexSchedule()
+    // {
+    //     return view('user.schedule.schedule');
+    // }
 
     public function indexScheduleForm()
     {
@@ -121,7 +144,8 @@ class UserController extends Controller
             'email' => $validate['email'],
             'phone' => $validate['phone'],
             'address' => $validate['address'],
-            'password' => $validate['password'],
+            // 'password' => $validate['password'],
+            'password' => Hash::make($validate['password']),
             'role' => $validate['role'],
         ]);
 
@@ -141,7 +165,13 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8',
         ]);
 
-        if (empty($validated['password'])) unset($validated['password']);
+        // if (empty($validated['password'])) unset($validated['password']);
+        if (!empty($validated['password'])) {
+
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
         $user->update($validated);
 
