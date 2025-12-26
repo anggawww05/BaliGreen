@@ -22,6 +22,13 @@ class PickupRequest extends Model
         'notes'
     ];
 
+    const STATUSES_ENUM = [
+        'pending' => 'Pending',
+        // 'in_progress' => 'In Progress',
+        'completed' => 'Completed',
+        'rejected' => 'Rejected',
+    ];
+
     protected $with = ['user'];
 
     protected $appends = ['current_priority_score'];

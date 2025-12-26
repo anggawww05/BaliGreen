@@ -57,7 +57,7 @@
             </div>
         </a>
 
-        @php $isActive = request()->routeIs('admin.request-pickup.index'); @endphp
+        @php $isActive = request()->routeIs('admin.request-pickup.index', 'admin.detail-pickup.index'); @endphp
         <a href="{{ route('admin.request-pickup.index') }}"
             class="sidebar-menu-item group flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 {{ $isActive ? 'bg-[#52a08a]/10 translate-x-1' : 'hover:bg-[#52a08a]/10 hover:translate-x-1' }}">
             <div

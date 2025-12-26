@@ -32,7 +32,7 @@ Route::controller(\App\Http\Controllers\PickupController::class)->group(function
     Route::get('/schedule/schedule-form/edit/{pickupRequest}', 'showUpdateFormPickup')->name('schedule-edit.form');
     Route::put('/schedule/schedule-form/edit/{pickupRequest}', 'updateFormPickup')->name('schedule.update');
     Route::get('/request-pickup', 'indexRequestPickup')->name('admin.request-pickup.index');
-    Route::get('/request-pickup/detail-pickup/{pickupRequest}', 'indexDetailPickup')->name('admin.detail-pickup.index');
+    Route::get('/request-pickup/detail-pickup/{id}', 'indexDetailPickup')->name('admin.detail-pickup.index');
     Route::post('/request-pickup/verify-sorted/{pickupRequest}', 'verifySorted')->name('admin.verify-sorted.update');
 });
 

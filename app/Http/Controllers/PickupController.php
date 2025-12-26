@@ -155,13 +155,6 @@ class PickupController extends Controller
         return redirect()->route('schedule.index')->with('success', 'Data penjemputan berhasil diperbarui!');
     }
 
-    // public function indexRequestPickup()
-    // {
-    //     return view('admin.request-pickup.table-request-pickup');
-    // }
-
-
-
     public function indexRequestPickup()
     {
         $requests = \App\Models\PickupRequest::with(['user', 'items.wasteCategory'])
@@ -176,12 +169,14 @@ class PickupController extends Controller
         ]);
     }
 
-    public function indexDetailPickup(PickupRequest $pickupRequest)
+    public function indexDetailPickup($id)
     {
-        $pickupRequest->load(['user', 'items.wasteCategory']);
+        $pickupRequest = \App\Models\PickupRequest::with(['user', 'items.wasteCategory'])->findOrFail($id);
+        $statuses = \App\Models\PickupRequest::STATUSES_ENUM;
 
-        return view('admin.request-pickup.detail-request-pickup', [
-            'pickupRequest'   => $pickupRequest,
+        return view('admin.request-pickup.detail-pickup', [
+            'pickupRequest' => $pickupRequest,
+            'statuses' => $statuses
         ]);
     }
 
